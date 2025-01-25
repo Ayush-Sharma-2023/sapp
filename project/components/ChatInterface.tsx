@@ -13,11 +13,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ closeChat }) => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     { sender: "bot", message: "Hello, what can I do for you today?" },
   ]);
-  const [options, setOptions] = useState([
+
+  const [allOptions, setAllOptions] = useState([
     { label: "I am feeling sick", value: "sick" },
     { label: "I have a headache", value: "headache" },
     { label: "Others", value: "others" },
   ]);
+
+  const [visibleOptions, setVisibleOptions] = useState(allOptions.slice(0, 3)); // Display first 3 options
+  const [currentPage, setCurrentPage] = useState(0); // Tracks pagination
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-scroll to the bottom
@@ -30,20 +34,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ closeChat }) => {
   const handleOptionSelect = (optionValue: string) => {
     let responseMessage = "";
 
-    // Match option value to response
+    // Dynamic response generation
     if (optionValue === "sick") {
       responseMessage = "I'm sorry to hear you're feeling sick. Please take care!";
     } else if (optionValue === "headache") {
       responseMessage = "A headache can be tough. Would you like some tips for relief?";
     } else if (optionValue === "others") {
       responseMessage = "Can you please elaborate on how you're feeling?";
-      setOptions([
+      const newOptions = [
         { label: "I am feeling anxious", value: "anxious" },
         { label: "I am feeling tired", value: "tired" },
         { label: "I have body aches", value: "aches" },
         { label: "I am stressed", value: "stressed" },
         { label: "Back to main options", value: "back" },
-      ]);
+      ];
+      setAllOptions(newOptions);
+      setVisibleOptions(newOptions.slice(0, 3)); // Show first 3 options from new batch
+      setCurrentPage(0); // Reset pagination
     } else if (optionValue === "anxious") {
       responseMessage = "It can be difficult to feel anxious. Take deep breaths and relax!";
     } else if (optionValue === "tired") {
@@ -54,18 +61,35 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ closeChat }) => {
       responseMessage = "Stress is tough, but we can manage it. Try some relaxation techniques!";
     } else if (optionValue === "back") {
       responseMessage = "Welcome back! What can I assist you with today?";
-      setOptions([
+      const mainOptions = [
         { label: "I am feeling sick", value: "sick" },
         { label: "I have a headache", value: "headache" },
         { label: "Others", value: "others" },
-      ]);
+      ];
+      setAllOptions(mainOptions);
+      setVisibleOptions(mainOptions.slice(0, 3)); // Show first 3 main options
+      setCurrentPage(0); // Reset pagination
     }
 
-    setChatHistory([
-      ...chatHistory,
+    setChatHistory((prev) => [
+      ...prev,
       { sender: "user", message: optionValue },
       { sender: "bot", message: responseMessage },
     ]);
+  };
+
+  const handleNextPage = () => {
+    const nextPage = currentPage + 1;
+    const startIndex = nextPage * 3;
+    setVisibleOptions(allOptions.slice(startIndex, startIndex + 3));
+    setCurrentPage(nextPage);
+  };
+
+  const handlePrevPage = () => {
+    const prevPage = currentPage - 1;
+    const startIndex = prevPage * 3;
+    setVisibleOptions(allOptions.slice(startIndex, startIndex + 3));
+    setCurrentPage(prevPage);
   };
 
   return (
@@ -90,13 +114,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ closeChat }) => {
             </p>
           </div>
         ))}
-        {/* Reference for auto-scroll */}
         <div ref={chatEndRef} />
       </div>
 
       {/* Chat Options */}
       <div className="chat-options space-y-2">
-        {options.map((option, index) => (
+        {visibleOptions.map((option, index) => (
           <button
             key={index}
             onClick={() => handleOptionSelect(option.value)}
@@ -105,6 +128,32 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ closeChat }) => {
             {option.label}
           </button>
         ))}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="pagination-controls flex justify-between mt-4">
+        <button
+          onClick={handlePrevPage}
+          disabled={currentPage === 0}
+          className={`p-2 rounded-md ${
+            currentPage === 0
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+        >
+          Previous
+        </button>
+        <button
+          onClick={handleNextPage}
+          disabled={(currentPage + 1) * 3 >= allOptions.length}
+          className={`p-2 rounded-md ${
+            (currentPage + 1) * 3 >= allOptions.length
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+        >
+          Next
+        </button>
       </div>
 
       {/* Close Button */}
