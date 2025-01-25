@@ -1,4 +1,5 @@
 "use client"
+import { Navbar } from "@/components/Navbar"
 
 import { useState } from "react"
 
@@ -44,6 +45,8 @@ export default function AddResourcePage() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="border p-4 rounded">
       <h2 className="text-xl font-bold">Add New Resource</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,5 +88,6 @@ export default function AddResourcePage() {
         </button>
       </form>
     </div>
+    </>
   )
 }

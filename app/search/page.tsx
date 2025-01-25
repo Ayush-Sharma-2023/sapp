@@ -1,5 +1,6 @@
 "use client"
 
+import { Navbar } from "@/components/Navbar"
 import { useState, useEffect } from "react"
 
 export function ResourceSearch() {
@@ -35,6 +36,9 @@ export function ResourceSearch() {
   )
 
   return (
+  <>
+    <Navbar />
+  
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <input
@@ -76,6 +80,8 @@ export function ResourceSearch() {
         )}
       </div>
     </div>
+  </>
   )
+
 }
 export default ResourceSearch
