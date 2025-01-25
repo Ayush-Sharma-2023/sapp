@@ -1,31 +1,33 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Package2, Users, HeartHandshake, MapPin } from "lucide-react"
-import Link from "next/link"
+"use client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Package2, Users, HeartHandshake, MapPin } from "lucide-react";
+import Link from "next/link";
+import NewsList from "@/components/NewsList";  // Import NewsList component
 
 export default function Home() {
   const features = [
     {
       icon: Package2,
       title: "Resource Listings",
-      description: "List and discover essential resources in your community"
+      description: "List and discover essential resources in your community",
     },
     {
       icon: MapPin,
       title: "Location-Based",
-      description: "Find resources near you with integrated mapping"
+      description: "Find resources near you with integrated mapping",
     },
     {
       icon: Users,
       title: "Community-Driven",
-      description: "Connect with neighbors to share and request resources"
+      description: "Connect with neighbors to share and request resources",
     },
     {
       icon: HeartHandshake,
       title: "Help Others",
-      description: "Volunteer and respond to community requests"
-    }
-  ]
+      description: "Volunteer and respond to community requests",
+    },
+  ];
 
   return (
     <div className="space-y-12">
@@ -56,15 +58,10 @@ export default function Home() {
         ))}
       </section>
 
-      {/* <section className="bg-muted rounded-lg p-8 text-center">
-        <CardTitle className="text-2xl mb-4">Ready to help your community?</CardTitle>
-        <CardDescription className="text-lg mb-6">
-          Join our platform to start sharing resources and helping others in need.
-        </CardDescription>
-        <Button size="lg">Get Started</Button>
-      </section> */}
-      
-
+      {/* Add News Section */}
+      <section className="py-12">
+        <NewsList />
+      </section>
     </div>
-  )
+  );
 }
