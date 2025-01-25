@@ -8,36 +8,35 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
-import { db } from "@/lib/firebase"
-import { collection, addDoc } from "firebase/firestore"
-import { useAuth } from "@/hooks/use-auth"
-import { LocationSearch } from "@/components/location-search"
 
 export default function AddResourcePage() {
   const router = useRouter()
   const { toast } = useToast()
-  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
-  const [location, setLocation] = useState<{ address: string; latitude: number; longitude: number } | null>(null)
+  const [location, setLocation] = useState<string>("")
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!user || !location) return
+    if (!location) return
 
     setLoading(true)
     const formData = new FormData(e.currentTarget)
-    
+
+    const newResource = {
+      title: formData.get("title"),
+      description: formData.get("description"),
+      category: formData.get("category"),
+      quantity: parseInt(formData.get("quantity") as string),
+      location,
+      createdAt: new Date(),
+      status: "available"
+    }
+
     try {
-      await addDoc(collection(db, "resources"), {
-        title: formData.get("title"),
-        description: formData.get("description"),
-        category: formData.get("category"),
-        quantity: parseInt(formData.get("quantity") as string),
-        location,
-        userId: user.uid,
-        createdAt: new Date(),
-        status: "available"
-      })
+      const existingResources = JSON.parse(localStorage.getItem("resources") || "[]")
+      existingResources.push(newResource)
+
+      localStorage.setItem("resources", JSON.stringify(existingResources))
 
       toast({
         title: "Resource added successfully",
@@ -54,16 +53,6 @@ export default function AddResourcePage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  if (!user) {
-    return (
-      <Card>
-        <CardContent className="pt-6">
-          <p>Please sign in to add resources.</p>
-        </CardContent>
-      </Card>
-    )
   }
 
   return (
@@ -104,8 +93,15 @@ export default function AddResourcePage() {
           </div>
 
           <div className="space-y-2">
-            <label>Location</label>
-            <LocationSearch onSelect={setLocation} />
+            <label htmlFor="location">Location</label>
+            <Input
+              id="location"
+              name="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
           </div>
 
           <Button type="submit" disabled={loading || !location}>
