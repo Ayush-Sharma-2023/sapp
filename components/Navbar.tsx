@@ -32,7 +32,7 @@ export function Navbar() {
       href: "/requests",
       label: "Requests",
       active: pathname === "/requests",
-      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
+      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> 
     }
   ]
 
@@ -51,7 +51,7 @@ export function Navbar() {
               }`}
             >
               <Link href={route.href} className="flex items-center gap-2">
-                <route.icon />
+                {/* <route.icon /> */}
                 {route.label}
               </Link>
             </button>
