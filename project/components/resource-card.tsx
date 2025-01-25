@@ -42,9 +42,9 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           </span>
         </div>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <Button className="w-full">Request Resource</Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   )
 }
