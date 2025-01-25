@@ -13,7 +13,7 @@ interface ResourceCardProps {
   resource: Resource
 }
 
-export function ResourceCard({ resource }: ResourceCardProps) {
+const ResourceCard = ({ resource }: ResourceCardProps) => {
   return (
     <div className="border rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow bg-gray-900 text-gray-200">
       <div className="flex items-start justify-between">
@@ -52,3 +52,5 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     </div>
   )
 }
+
+export default ResourceCard
