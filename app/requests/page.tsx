@@ -1,5 +1,5 @@
 "use client"
-
+import { Navbar } from "@/components/Navbar"
 interface Resource {
   title: string
   description: string
@@ -15,6 +15,8 @@ interface ResourceCardProps {
 
 export function ResourceCard({ resource }: ResourceCardProps) {
   return (
+    <>
+    <Navbar />
     <div className="border rounded p-4">
       <div className="flex items-start justify-between">
         <div>
@@ -42,6 +44,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
         <button className="bg-blue-500 text-white px-4 py-2 rounded w-full">Request Resource</button>
       </div>
     </div>
+  </>
   )
 }
 
