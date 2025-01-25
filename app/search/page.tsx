@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
-
-import { useState } from "react"
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
+import {Navbar} from "@/components/Navbar";
+import { useState } from "react";
+import { MdMap } from "react-icons/md"; // Use react-icons for map icon
 
 interface Resource {
-  id: string
-  title: string
-  description: string
-  location: { address: string }
-  status: string
-  quantity: number
-  createdAt: Date
+  id: string;
+  title: string;
+  description: string;
+  location: { address: string };
+  status: string;
+  quantity: number;
+  createdAt: Date;
 }
 
 const placeholderResources: Resource[] = [
@@ -32,10 +33,10 @@ const placeholderResources: Resource[] = [
     quantity: 0,
     createdAt: new Date(),
   },
-]
+];
 
 export function ResourceSearch() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
   const [resources, setResources] = useState([
     {
       id: 1,
@@ -55,64 +56,64 @@ export function ResourceSearch() {
       description: "Description for resource 3",
       status: "unavailable",
     },
-  ])
-  const [showMap, setShowMap] = useState(false)
-  const [loading, setLoading] = useState(false)
+  ]);
+  const [showMap, setShowMap] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const filteredResources = resources.filter(resource =>
-    resource.status === "available" && (
-      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      resource.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  )
+  const filteredResources = resources.filter(
+    (resource) =>
+      resource.status === "available" &&
+      (resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   return (
-  <>
-    <Navbar />
-  
-    <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <input
-          type="text"
-          placeholder="Search resources..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-xl border p-2 rounded"
-        />
-        <button
-          onClick={() => setShowMap(!showMap)}
-          className="border px-4 py-2 rounded flex items-center gap-2"
-        >
-          <span className="material-icons">map</span>
-          {showMap ? "Hide Map" : "Show Map"}
-        </button>
-      </div>
+    <>
+      <Navbar />
 
-      {showMap && (
-        <div className="mb-6">
-          <div className="h-64 bg-gray-200 flex items-center justify-center">
-            <p>Map Placeholder</p>
-          </div>
+      <div className="space-y-4">
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search resources..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="max-w-xl border p-2 rounded"
+          />
+          <button
+            onClick={() => setShowMap(!showMap)}
+            className="border px-4 py-2 rounded flex items-center gap-2"
+          >
+            <MdMap className="text-lg" /> {/* React Icons map icon */}
+            {showMap ? "Hide Map" : "Show Map"}
+          </button>
         </div>
-      )}
 
-      <div className="grid gap-4">
-        {loading ? (
-          <p>Loading resources...</p>
-        ) : filteredResources.length === 0 ? (
-          <p>No resources found.</p>
-        ) : (
-          filteredResources.map((resource) => (
-            <div key={resource.id} className="border p-4 rounded">
-              <h3 className="text-lg font-bold">{resource.title}</h3>
-              <p>{resource.description}</p>
+        {showMap && (
+          <div className="mb-6">
+            <div className="h-64 bg-gray-200 flex items-center justify-center">
+              <p>Map Placeholder</p>
             </div>
-          ))
+          </div>
         )}
+
+        <div className="grid gap-4">
+          {loading ? (
+            <p>Loading resources...</p>
+          ) : filteredResources.length === 0 ? (
+            <p>No resources found.</p>
+          ) : (
+            filteredResources.map((resource) => (
+              <div key={resource.id} className="border p-4 rounded">
+                <h3 className="text-lg font-bold">{resource.title}</h3>
+                <p>{resource.description}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-    </div>
-  </>
-  )
+    </>
+  );
 }
 
-export default ResourceSearch
+export default ResourceSearch;
