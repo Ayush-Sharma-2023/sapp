@@ -1,68 +1,63 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { ResourceCard } from "@/components/resource-card"
-import { MapView } from "@/components/map-view"
-import { Resource } from "@/types"
-import { db } from "@/lib/firebase"
-import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore"
-import { Button } from "@/components/ui/button"
-import { Map } from "lucide-react"
 
 export function ResourceSearch() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [resources, setResources] = useState<Resource[]>([])
+  const [resources, setResources] = useState([
+    {
+      id: 1,
+      title: "Resource 1",
+      description: "Description for resource 1",
+      status: "available",
+    },
+    {
+      id: 2,
+      title: "Resource 2",
+      description: "Description for resource 2",
+      status: "available",
+    },
+    {
+      id: 3,
+      title: "Resource 3",
+      description: "Description for resource 3",
+      status: "unavailable",
+    },
+  ])
   const [showMap, setShowMap] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const q = query(
-      collection(db, "resources"),
-      where("status", "==", "available"),
-      orderBy("createdAt", "desc")
-    )
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const resources = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Resource[]
-
-      setResources(resources)
-      setLoading(false)
-    })
-
-    return () => unsubscribe()
-  }, [])
+  const [loading, setLoading] = useState(false)
 
   const filteredResources = resources.filter(resource =>
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+    resource.status === "available" && (
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+    )
   )
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <Input
+        <input
+          type="text"
           placeholder="Search resources..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-xl"
+          className="max-w-xl border p-2 rounded"
         />
-        <Button
-          variant="outline"
+        <button
           onClick={() => setShowMap(!showMap)}
-          className="flex items-center gap-2"
+          className="border px-4 py-2 rounded flex items-center gap-2"
         >
-          <Map className="h-4 w-4" />
+          <span className="material-icons">map</span>
           {showMap ? "Hide Map" : "Show Map"}
-        </Button>
+        </button>
       </div>
 
       {showMap && (
         <div className="mb-6">
-          <MapView resources={filteredResources} />
+          <div className="h-64 bg-gray-200 flex items-center justify-center">
+            <p>Map Placeholder</p>
+          </div>
         </div>
       )}
 
@@ -73,7 +68,10 @@ export function ResourceSearch() {
           <p>No resources found.</p>
         ) : (
           filteredResources.map((resource) => (
-            <ResourceCard key={resource.id} resource={resource} />
+            <div key={resource.id} className="border p-4 rounded">
+              <h3 className="text-lg font-bold">{resource.title}</h3>
+              <p>{resource.description}</p>
+            </div>
           ))
         )}
       </div>
