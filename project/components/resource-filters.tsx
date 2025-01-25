@@ -49,7 +49,7 @@ export function ResourceFilters() {
             <Slider
               defaultValue={[1]} // Default value is 1 km
               min={1} // Minimum value
-              max={10} // Maximum value
+              max={50} // Maximum value
               step={1} // Step value
               className="w-full"
               onValueChange={(value) => setDistance(value[0])} // Update the distance state
