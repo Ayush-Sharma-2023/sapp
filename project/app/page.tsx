@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Package2, Users, HeartHandshake, MapPin } from "lucide-react";
 import Link from "next/link";
 import NewsList from "@/components/NewsList";  // Import NewsList component
+import ChatbotBubble from "@/components/chatBubble";
 
 export default function Home() {
   const features = [
@@ -57,6 +58,11 @@ export default function Home() {
           </Card>
         ))}
       </section>
+      
+      {/* Add Chatbot Section */}
+
+      <ChatbotBubble />
+\
 
       {/* Add News Section */}
       <section className="py-12">

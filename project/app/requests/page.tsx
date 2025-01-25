@@ -7,6 +7,7 @@ import { MapView } from "@/components/map-view";
 import { Resource } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Map } from "lucide-react";
+import ChatbotBubble from "@/components/chatBubble";
 
 export function ResourceSearch() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -119,6 +120,7 @@ export function ResourceSearch() {
           ))
         )}
       </div>
+      <ChatbotBubble />
     </div>
   );
 }

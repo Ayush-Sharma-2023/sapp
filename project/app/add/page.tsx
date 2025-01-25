@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import ChatbotBubble from "@/components/chatBubble";
 
 export default function AddResourcePage() {
   const router = useRouter();
@@ -134,6 +135,7 @@ export default function AddResourcePage() {
           </Button>
         </form>
       </CardContent>
+      <ChatbotBubble />
     </Card>
   );
 }
