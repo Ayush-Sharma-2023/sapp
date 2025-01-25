@@ -13,16 +13,14 @@ interface ResourceCardProps {
   resource: Resource
 }
 
-const ResourceCard = ({ resource }: ResourceCardProps) => {
+export default function ResourceCard({ resource }: ResourceCardProps) {
   return (
     <div className="border rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow bg-gray-900 text-gray-200">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-white">{resource.title}</h3>
-          <p className="text-sm text-gray-400 mt-2">
-            <span className="flex items-center gap-1">
-              📍 {resource.location.address}
-            </span>
+          <p className="text-sm text-gray-400 mt-2 flex items-center gap-1">
+            📍 {resource.location.address}
           </p>
         </div>
         <span
@@ -40,7 +38,7 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
             📦 {resource.quantity} available
           </span>
           <span className="text-sm text-gray-400">
-            Posted {resource.createdAt.toDateString()}
+            Posted {new Date(resource.createdAt).toDateString()}
           </span>
         </div>
       </div>
@@ -52,5 +50,3 @@ const ResourceCard = ({ resource }: ResourceCardProps) => {
     </div>
   )
 }
-
-export default ResourceCard
