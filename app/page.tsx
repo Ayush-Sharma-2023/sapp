@@ -10,6 +10,7 @@ export default function Home() {
   <h3>Altaf here 1st change</h3>
   <h2>Ayush here</h2>
   <h1>Harsh here</h1>
+  <h3>altaf second testing</h3>
 
     
     {/* /*
