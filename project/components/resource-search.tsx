@@ -8,7 +8,7 @@ import { Resource } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Map } from "lucide-react";
 
-export function ResourceSearch() {
+export function ResourceSearch({ selectedCategory }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [resources, setResources] = useState<Resource[]>([]);
   const [showMap, setShowMap] = useState(false);
@@ -47,10 +47,16 @@ export function ResourceSearch() {
     };
   }, []);
 
-  const filteredResources = resources.filter((resource) =>
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredResources = resources.filter((resource) => {
+    const matchesQuery =
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "all" || resource.category === selectedCategory;
+
+    return matchesQuery && matchesCategory;
+  });
 
   return (
     <div className="space-y-4">

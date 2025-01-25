@@ -15,7 +15,7 @@ const categories = [
   { id: "clothing", label: "Clothing", icon: Shirt },
 ];
 
-export function ResourceFilters() {
+export function ResourceFilters({ selectedCategory, setSelectedCategory }) {
   // State to track the slider value
   const [distance, setDistance] = useState(1); // Default is 1 km
 
@@ -26,7 +26,10 @@ export function ResourceFilters() {
           <CardTitle>Categories</CardTitle>
         </CardHeader>
         <CardContent>
-          <RadioGroup defaultValue="all">
+          <RadioGroup
+            value={selectedCategory}
+            onValueChange={(value) => setSelectedCategory(value)}
+          >
             {categories.map((category) => (
               <div key={category.id} className="flex items-center space-x-2">
                 <RadioGroupItem value={category.id} id={category.id} />
@@ -58,28 +61,6 @@ export function ResourceFilters() {
               Within {distance} {distance === 1 ? "km" : "kms"}
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Availability</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RadioGroup defaultValue="all">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="all" id="all-status" />
-              <Label htmlFor="all-status">All</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="available" id="available" />
-              <Label htmlFor="available">Available</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="reserved" id="reserved" />
-              <Label htmlFor="reserved">Reserved</Label>
-            </div>
-          </RadioGroup>
         </CardContent>
       </Card>
     </div>
