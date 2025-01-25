@@ -1,59 +1,84 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AddResourcePage() {
-  const router = useRouter()
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-  const [location, setLocation] = useState<string>("")
+  const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!location) return
+    e.preventDefault();
+    if (!location) return;
 
-    setLoading(true)
-    const formData = new FormData(e.currentTarget)
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
 
-    const newResource = {
-      title: formData.get("title"),
-      description: formData.get("description"),
-      category: formData.get("category"),
-      quantity: parseInt(formData.get("quantity") as string),
-      location,
-      createdAt: new Date(),
-      status: "available"
+    // Debugging: Check Form Data
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const category = formData.get("category");
+    const quantity = parseInt(formData.get("quantity") as string);
+
+    console.log("Form Data", { title, description, category, quantity });
+
+    if (!title || !description || !category || isNaN(quantity)) {
+      toast({
+        title: "Error",
+        description: "All fields are required.",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
     }
 
-    try {
-      const existingResources = JSON.parse(localStorage.getItem("resources") || "[]")
-      existingResources.push(newResource)
+    const newResource = {
+      id: Date.now().toString(), // Unique ID for resource
+      title,
+      description,
+      category,
+      quantity,
+      location,
+      createdAt: new Date(),
+      status: "available",
+    };
 
-      localStorage.setItem("resources", JSON.stringify(existingResources))
+    try {
+      const existingResources = JSON.parse(localStorage.getItem("resources") || "[]");
+      console.log("Existing Resources before adding:", existingResources);
+
+      existingResources.push(newResource);
+
+      // Debugging: Ensure resource is being added to array
+      console.log("Updated Resources:", existingResources);
+
+      localStorage.setItem("resources", JSON.stringify(existingResources));
 
       toast({
         title: "Resource added successfully",
-        description: "Your resource has been listed and is now available to the community."
-      })
+        description: "Your resource has been listed and is now available to the community.",
+      });
 
-      router.push("/search")
+      router.push("/search");
     } catch (error) {
+      console.error("Error saving resource:", error);
       toast({
         title: "Error",
         description: "Failed to add resource. Please try again.",
-        variant: "destructive"
-      })
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card>
@@ -110,5 +135,5 @@ export default function AddResourcePage() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
