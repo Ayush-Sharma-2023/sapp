@@ -56,13 +56,15 @@ export default function Home() {
         ))}
       </section>
 
-      <section className="bg-muted rounded-lg p-8 text-center">
+      {/* <section className="bg-muted rounded-lg p-8 text-center">
         <CardTitle className="text-2xl mb-4">Ready to help your community?</CardTitle>
         <CardDescription className="text-lg mb-6">
           Join our platform to start sharing resources and helping others in need.
         </CardDescription>
         <Button size="lg">Get Started</Button>
-      </section>
+      </section> */}
+      
+
     </div>
   )
 }
