@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input"
 import { ResourceCard } from "@/components/resource-card"
 import { MapView } from "@/components/map-view"
 import { Resource } from "@/types"
-import { db } from "@/lib/firebase"
-import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore"
 import { Button } from "@/components/ui/button"
 import { Map } from "lucide-react"
 
@@ -17,23 +15,10 @@ export function ResourceSearch() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const q = query(
-      collection(db, "resources"),
-      where("status", "==", "available"),
-      orderBy("createdAt", "desc")
-    )
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const resources = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Resource[]
-
-      setResources(resources)
-      setLoading(false)
-    })
-
-    return () => unsubscribe()
+    // Fetch resources from localStorage
+    const storedResources = JSON.parse(localStorage.getItem("resources") || "[]")
+    setResources(storedResources)
+    setLoading(false)
   }, [])
 
   const filteredResources = resources.filter(resource =>
