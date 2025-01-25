@@ -12,7 +12,7 @@ export default function Home() {
   <h1>Harsh here</h1>
   <h3>altaf second testing</h3>
   <h2>#rfdfsdfdsf</h2> */}
-  <h3>All testing done</h3>
+  {/* <h3>All testing done</h3> */}
   <Navbar />
     {/* /*
     git add . 
