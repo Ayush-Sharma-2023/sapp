@@ -1,139 +1,130 @@
 "use client"
+
 import { Navbar } from "@/components/Navbar"
 import { useState } from "react"
 
 // Resource interface
 interface Resource {
-  id: number
+  id: string
   title: string
   description: string
-  category: string
-  quantity: number
-  location: { address: string; latitude: number; longitude: number }
-  userId: string
-  createdAt: Date
+  location: { address: string }
   status: string
+  quantity: number
+  createdAt: Date
 }
 
-export default function AddResourcePage() {
-  const [loading, setLoading] = useState(false)
-  const [resources, setResources] = useState<Resource[]>([]) // Manage resources in state
-  const [location, setLocation] = useState<{ address: string; latitude: number; longitude: number }>({
-    address: "123 Community Center",
-    latitude: 0,
-    longitude: 0,
-  })
+const placeholderResources: Resource[] = [
+  {
+    id: "1",
+    title: "Sample Resource 1",
+    description: "Description for Sample Resource 1",
+    location: { address: "123 Placeholder St" },
+    status: "available",
+    quantity: 10,
+    createdAt: new Date(),
+  },
+  {
+    id: "2",
+    title: "Sample Resource 2",
+    description: "Description for Sample Resource 2",
+    location: { address: "456 Example Ave" },
+    status: "unavailable",
+    quantity: 0,
+    createdAt: new Date(),
+  },
+]
 
-  const user = { uid: "12345" } // Placeholder for user authentication
+export function ResourceSearch() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [resources, setResources] = useState<Resource[]>(placeholderResources)
+  const [showMap, setShowMap] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!user || !location) return
+  const filteredResources = resources.filter((resource) =>
+    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    resource.description.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
-    setLoading(true)
-    const formData = new FormData(e.currentTarget)
-
-    const newResource: Resource = {
-      id: resources.length + 1, // Generate a unique ID
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      category: formData.get("category") as string,
-      quantity: parseInt(formData.get("quantity") as string),
-      location,
-      userId: user.uid,
-      createdAt: new Date(),
-      status: "available",
-    }
-
-    // Add the new resource to the state
+  const handleAddResource = (newResource: Resource) => {
     setResources((prev) => [...prev, newResource])
-
-    alert("Resource added successfully!")
-    setLoading(false)
   }
 
   return (
     <>
       <Navbar />
-      <div className="p-4">
-        <div className="border p-4 rounded">
-          <h2 className="text-xl font-bold">Add New Resource</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="title">Title</label>
-              <input id="title" name="title" required className="border p-2 rounded w-full" />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="description">Description</label>
-              <textarea id="description" name="description" required className="border p-2 rounded w-full" />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="category">Category</label>
-              <select id="category" name="category" required className="border p-2 rounded w-full">
-                <option value="">Select category</option>
-                <option value="medical">Medical Supplies</option>
-                <option value="food">Food & Water</option>
-                <option value="hygiene">Hygiene Products</option>
-                <option value="clothing">Clothing</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="quantity">Quantity</label>
-              <input id="quantity" name="quantity" type="number" min="1" required className="border p-2 rounded w-full" />
-            </div>
-
-            <div className="space-y-2">
-              <label>Location</label>
-              <div className="h-40 bg-gray-200 flex items-center justify-center rounded">
-                <p>{location.address}</p>
-              </div>
-            </div>
-
-            <button type="submit" disabled={loading} className="bg-blue-500 text-white px-4 py-2 rounded w-full">
-              {loading ? "Adding..." : "Add Resource"}
-            </button>
-          </form>
+      <div className="space-y-4 bg-gray-950 min-h-screen p-6 text-gray-200">
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search resources..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border px-4 py-2 rounded w-full max-w-xl bg-gray-800 text-gray-200 focus:ring focus:ring-gray-700"
+          />
+          <button
+            onClick={() => setShowMap(!showMap)}
+            className="px-4 py-2 border rounded flex items-center gap-2 bg-gray-700 text-gray-200 hover:bg-gray-600 focus:ring focus:ring-gray-500"
+          >
+            <span>🗺️</span>
+            {showMap ? "Hide Map" : "Show Map"}
+          </button>
         </div>
 
-        {/* Display the list of resources */}
-        <div className="mt-8 space-y-4">
-          <h3 className="text-xl font-bold">Available Resources</h3>
-          {resources.length === 0 ? (
-            <p>No resources added yet.</p>
+        {showMap && (
+          <div className="mb-6">
+            <div className="h-64 bg-gray-800 flex items-center justify-center text-gray-300 border border-gray-700 rounded">
+              <p>Map Placeholder</p>
+            </div>
+          </div>
+        )}
+
+        <div className="grid gap-4">
+          {filteredResources.length === 0 ? (
+            <p className="text-gray-300">No resources found.</p>
           ) : (
-            <ul className="space-y-4">
-              {resources.map((resource) => (
-                <li key={resource.id} className="border p-4 rounded">
-                  <h4 className="text-lg font-bold">{resource.title}</h4>
-                  <p>{resource.description}</p>
-                  <p>
-                    Category: <strong>{resource.category}</strong>
-                  </p>
-                  <p>
-                    Quantity: <strong>{resource.quantity}</strong>
-                  </p>
-                  <p>
-                    Location: <strong>{resource.location.address}</strong>
-                  </p>
-                  <p>
-                    Status:{" "}
-                    <span
-                      className={`px-2 py-1 rounded ${
-                        resource.status === "available" ? "bg-green-200" : "bg-gray-200"
-                      }`}
-                    >
-                      {resource.status}
+            filteredResources.map((resource) => (
+              <div
+                key={resource.id}
+                className="border border-gray-700 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow bg-gray-900 text-gray-200"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">{resource.title}</h3>
+                    <p className="text-sm text-gray-400 mt-2">
+                      <span className="flex items-center gap-1">📍 {resource.location.address}</span>
+                    </p>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium text-white ${
+                      resource.status === "available" ? "bg-green-600" : "bg-gray-600"
+                    }`}
+                  >
+                    {resource.status}
+                  </span>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm text-gray-300 leading-relaxed">{resource.description}</p>
+                  <div className="mt-4 flex items-center gap-6">
+                    <span className="px-3 py-1 border rounded-full text-sm font-medium bg-gray-800 text-gray-300">
+                      📦 {resource.quantity} available
                     </span>
-                  </p>
-                </li>
-              ))}
-            </ul>
+                    <span className="text-sm text-gray-400">
+                      Posted {resource.createdAt.toDateString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <button className="bg-gray-700 text-white px-6 py-2 rounded-lg w-full hover:bg-gray-600 focus:ring focus:ring-gray-500">
+                    Request Resource
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </div>
       </div>
     </>
   )
 }
+
+export default ResourceSearch
