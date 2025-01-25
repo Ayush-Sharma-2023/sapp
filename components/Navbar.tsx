@@ -13,7 +13,7 @@ export function Navbar() {
   const routes = [
     {
       href: "/",
-      label: "HoMe",
+      label: "Home",
       active: pathname === "/",
       icon: Home, // Placeholder icon
     },
