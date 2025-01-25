@@ -46,17 +46,19 @@ export function ResourceSearch({ selectedCategory }) {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-
   const filteredResources = resources.filter((resource) => {
     const matchesQuery =
       resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       resource.description.toLowerCase().includes(searchQuery.toLowerCase());
-
+  
     const matchesCategory =
       selectedCategory === "all" || resource.category === selectedCategory;
-
-    return matchesQuery && matchesCategory;
+  
+    const hasQuantity = resource.quantity > 0; // Ensure the quantity is greater than 0
+  
+    return matchesQuery && matchesCategory && hasQuantity;
   });
+  
 
   return (
     <div className="space-y-4">

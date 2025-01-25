@@ -56,11 +56,16 @@ export function ResourceSearch() {
     fetchResources(); // Refresh state after updating localStorage
   };
 
-  const filteredResources = resources.filter((resource) =>
-    resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    resource.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  const filteredResources = resources.filter((resource) => {
+    const matchesQuery =
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase());
+  
+    const hasQuantity = resource.quantity > 0; // Ensure the quantity is greater than 0
+  
+    return matchesQuery && hasQuantity;
+  });
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
