@@ -78,3 +78,4 @@ export function ResourceSearch() {
     </div>
   )
 }
+export default ResourceSearch
