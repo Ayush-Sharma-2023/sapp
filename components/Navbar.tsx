@@ -2,40 +2,37 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Heart, Home, PlusCircle, Search } from "lucide-react"
-import { ModeToggle } from "@/components/mode-toggle"
-import { useAuth } from "@/hooks/use-auth"
 
 export function Navbar() {
   const pathname = usePathname()
-  const { user, signIn, signOut } = useAuth()
-  
+  const user = false // Replace with actual user authentication logic
+  const signIn = () => alert("Sign In function not implemented") // Placeholder
+  const signOut = () => alert("Sign Out function not implemented") // Placeholder
+
   const routes = [
     {
       href: "/",
       label: "Home",
-      icon: Home,
-      active: pathname === "/"
+      active: pathname === "/",
+      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
     },
     {
       href: "/search",
       label: "Find Resources",
-      icon: Search,
-      active: pathname === "/search"
+      active: pathname === "/search",
+      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
     },
     {
       href: "/add",
       label: "Add Resource",
-      icon: PlusCircle,
-      active: pathname === "/add"
+      active: pathname === "/add",
+      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
     },
     {
       href: "/requests",
       label: "Requests",
-      icon: Heart,
-      active: pathname === "/requests"
+      active: pathname === "/requests",
+      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
     }
   ]
 
@@ -47,26 +44,30 @@ export function Navbar() {
         </Link>
         <div className="flex items-center space-x-4 flex-1">
           {routes.map((route) => (
-            <Button
+            <button
               key={route.href}
-              variant={route.active ? "default" : "ghost"}
-              asChild
+              className={`btn ${
+                route.active ? "btn-default" : "btn-ghost"
+              }`}
             >
               <Link href={route.href} className="flex items-center gap-2">
-                <route.icon className="h-4 w-4" />
+                <route.icon />
                 {route.label}
               </Link>
-            </Button>
+            </button>
           ))}
         </div>
         <div className="flex items-center space-x-4">
-          <ModeToggle />
-          <Button
-            variant="default"
+          {/* Replace ModeToggle with a placeholder */}
+          <button className="btn btn-default" onClick={() => alert("Mode toggle not implemented")}>
+            Toggle Theme
+          </button>
+          <button
+            className="btn btn-default"
             onClick={user ? signOut : signIn}
           >
             {user ? "Sign Out" : "Sign In"}
-          </Button>
+          </button>
         </div>
       </div>
     </nav>

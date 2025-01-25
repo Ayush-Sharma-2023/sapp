@@ -1,4 +1,4 @@
-
+import { Navbar } from "@/components/Navbar";
 export default function Home() {
   return (
     <>
@@ -13,8 +13,7 @@ export default function Home() {
   <h3>altaf second testing</h3>
   <h2>#rfdfsdfdsf</h2> */}
   <h3>All testing done</h3>
-
-    
+  <Navbar />
     {/* /*
     git add . 
     git commit -m "Harsh commit"
