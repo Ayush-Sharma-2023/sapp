@@ -9,11 +9,12 @@ export default function Home() {
   <h1>Test 3</h1>
   <h3>Altaf here 1st change</h3>
   <h2>Ayush here</h2>
+  <h1>Harsh here</h1>
 
     
     {/* /*
     git add . 
-    git commit -m "Altaf commit"
+    git commit -m "Harsh commit"
     git push
     */}
 
