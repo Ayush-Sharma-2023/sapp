@@ -16,7 +16,7 @@ interface ResourceCardProps {
 export function ResourceCard({ resource }: ResourceCardProps) {
   return (
     <>
-    <Navbar />
+    
     <div className="border rounded p-4">
       <div className="flex items-start justify-between">
         <div>
@@ -59,8 +59,11 @@ export default function Page() {
   }
 
   return (
+    <>
+    <Navbar />
     <div className="p-8">
       <ResourceCard resource={sampleResource} />
     </div>
+    </>
   )
 }
