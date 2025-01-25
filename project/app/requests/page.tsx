@@ -1,57 +1,65 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { ResourceCard } from "@/components/resource-card"
-import { MapView } from "@/components/map-view"
-import { Resource } from "@/types"
-import { Button } from "@/components/ui/button"
-import { Map } from "lucide-react"
-import exp from "node:constants"
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { ResourceCard } from "@/components/resource-card";
+import { MapView } from "@/components/map-view";
+import { Resource } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Map } from "lucide-react";
 
 export function ResourceSearch() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [resources, setResources] = useState<Resource[]>([])
-  const [showMap, setShowMap] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [showMap, setShowMap] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const fetchResources = () => {
+    const storedResources = JSON.parse(localStorage.getItem("resources") || "[]");
+
+    // Deduplicate resources by `id`
+    const uniqueResources = storedResources.reduce((acc: Resource[], resource: Resource) => {
+      if (!acc.find((r) => r.id === resource.id)) {
+        acc.push(resource);
+      }
+      return acc;
+    }, []);
+
+    setResources(uniqueResources);
+  };
 
   useEffect(() => {
-    // Fetch resources from localStorage
-    const storedResources = JSON.parse(localStorage.getItem("resources") || "[]")
-    setResources(storedResources)
-    setLoading(false)
-  }, [])
+    // Fetch resources from localStorage on component mount
+    fetchResources();
+    setLoading(false);
+  }, []);
 
   const handleRequest = (resourceId: string, quantity: number) => {
-    setResources((prevResources) => {
-      return prevResources.map((resource) => {
-        if (resource.id === resourceId) {
-          if (resource.quantity >= quantity) {
-            // Subtract the requested quantity
-            const updatedResource = {
-              ...resource,
-              quantity: resource.quantity - quantity,
-            }
-
-            // Update localStorage
-            const updatedResources = prevResources.map((res) =>
-              res.id === resourceId ? updatedResource : res
-            )
-            localStorage.setItem("resources", JSON.stringify(updatedResources))
-            return updatedResource
-          } else {
-            alert(`Not enough resources available. Available: ${resource.quantity}`)
-          }
+    const updatedResources = resources.map((resource) => {
+      if (resource.id === resourceId) {
+        if (resource.quantity >= quantity) {
+          // Subtract the requested quantity
+          return {
+            ...resource,
+            quantity: resource.quantity - quantity,
+          };
+        } else {
+          alert(`Not enough resources available. Available: ${resource.quantity}`);
+          return resource;
         }
-        return resource
-      })
-    })
-  }
+      }
+      return resource;
+    });
 
-  const filteredResources = resources.filter(resource =>
+    // Update localStorage and refresh the state
+    localStorage.setItem("resources", JSON.stringify(updatedResources));
+    fetchResources(); // Refresh state after updating localStorage
+  };
+
+  const filteredResources = resources.filter((resource) =>
     resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     resource.description.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  );
 
   return (
     <div className="space-y-4">
@@ -90,11 +98,11 @@ export function ResourceSearch() {
               <div className="mt-2">
                 <Button
                   onClick={() => {
-                    const requestedQuantity = parseInt(prompt("Enter quantity to request:") || "0", 10)
+                    const requestedQuantity = parseInt(prompt("Enter quantity to request:") || "0", 10);
                     if (requestedQuantity > 0) {
-                      handleRequest(resource.id, requestedQuantity)
+                      handleRequest(resource.id, requestedQuantity);
                     } else {
-                      alert("Invalid quantity entered.")
+                      alert("Invalid quantity entered.");
                     }
                   }}
                   className="mt-2"
@@ -107,7 +115,7 @@ export function ResourceSearch() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default ResourceSearch
+export default ResourceSearch;
