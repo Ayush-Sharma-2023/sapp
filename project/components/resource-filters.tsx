@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Slider } from "@/components/ui/slider"
-import { Package2, Pill, Coffee, ShieldPlus, Shirt } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Package2, Pill, Coffee, ShieldPlus, Shirt } from "lucide-react";
 
 const categories = [
   { id: "all", label: "All Categories", icon: Package2 },
@@ -12,9 +13,12 @@ const categories = [
   { id: "food", label: "Food & Water", icon: Coffee },
   { id: "hygiene", label: "Hygiene Products", icon: ShieldPlus },
   { id: "clothing", label: "Clothing", icon: Shirt },
-]
+];
 
 export function ResourceFilters() {
+  // State to track the slider value
+  const [distance, setDistance] = useState(1); // Default is 1 km
+
   return (
     <div className="space-y-4">
       <Card>
@@ -43,13 +47,15 @@ export function ResourceFilters() {
         <CardContent>
           <div className="space-y-4">
             <Slider
-              defaultValue={[5]}
-              max={50}
-              step={1}
+              defaultValue={[1]} // Default value is 1 km
+              min={1} // Minimum value
+              max={10} // Maximum value
+              step={1} // Step value
               className="w-full"
+              onValueChange={(value) => setDistance(value[0])} // Update the distance state
             />
             <div className="text-sm text-muted-foreground">
-              Within 5 miles
+              Within {distance} {distance === 1 ? "km" : "kms"}
             </div>
           </div>
         </CardContent>
@@ -77,5 +83,5 @@ export function ResourceFilters() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
