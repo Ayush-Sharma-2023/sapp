@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Home, Search, PlusCircle, List } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname()
@@ -12,27 +13,27 @@ export function Navbar() {
   const routes = [
     {
       href: "/",
-      label: "Home",
+      label: "HoMe",
       active: pathname === "/",
-      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
+      icon: Home, // Placeholder icon
     },
     {
       href: "/search",
       label: "Find Resources",
       active: pathname === "/search",
-      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
+      icon: Search, // Placeholder icon
     },
     {
       href: "/add",
       label: "Add Resource",
       active: pathname === "/add",
-      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
+      icon: PlusCircle// Placeholder icon
     },
     {
       href: "/requests",
       label: "Requests",
       active: pathname === "/requests",
-      icon: () => <span className="h-4 w-4 bg-gray-400 inline-block rounded-full" /> // Placeholder icon
+      icon: List // Placeholder icon
     }
   ]
 
