@@ -62,7 +62,7 @@ export default function Home() {
       {/* Add Chatbot Section */}
 
       <ChatbotBubble />
-\
+
 
       {/* Add News Section */}
       <section className="py-12">
