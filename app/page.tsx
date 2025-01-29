@@ -1,6 +1,6 @@
-import { Navbar } from "@/components/Navbar";
+// import { Navbar } from "@/components/Navbar";
 export default function Home() {
   return (
-      <Navbar />
+      <h1>Hello hackathon</h1>
   );
 }
